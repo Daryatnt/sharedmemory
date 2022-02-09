@@ -1,0 +1,4 @@
+<launch>
+<node pkg="nodes" type="sub.py" name="sub" output="screen" />
+<node pkg="nodes" type="pub.py" name="pub"/>
+</launch>
