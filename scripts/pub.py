@@ -12,7 +12,7 @@ if __name__ == "__main__":
     rospy.init_node('publisher', anonymous=True)
     pub = rospy.Publisher("trying",String, queue_size=10)
     #a = np.array([1, 1, 2, 3, 5, 8])  # Start with an existing NumPy array
-    
+    shm = shared_memory.SharedMemory(create=True, size=921600)
    #  ret,frame=cap.read()
    #  cv2.imshow('cam',frame)
    #  shm = shared_memory.SharedMemory(create=True, size=a.nbytes)
@@ -24,21 +24,24 @@ if __name__ == "__main__":
    #  shm.close() 
    #  shm.unlink() 
    #  rospy.spin()
-
-while not rospy.is_shutdown():
-   cap=cv2.VideoCapture(0)
-   while(True):
+    
+    cap=cv2.VideoCapture(0)
+    
+# while not rospy.is_shutdown():
+   # cap=cv2.VideoCapture(0)
+while(True):
       ret,frame=cap.read()
       a=frame
       cv2.imshow('cam',frame) 
-      shm = shared_memory.SharedMemory(create=True, size=a.nbytes)
       b = np.ndarray(a.shape, dtype=a.dtype, buffer=shm.buf)
+      # print(a.shape)
       b[:] = a[:]  # Copy the original data into shared memory
+      print(b)
       pub.publish(str(shm.name))
       if cv2.waitKey(1)==ord('q'):
             break
     
-      
+
 
 
 
